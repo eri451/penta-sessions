@@ -72,7 +72,7 @@ group.commands.add(['sessions[ave]','mkses[sion]'],
     'Save current window',
     function(args) {
         let filename = args[0] ? (/^~?\//.test(args[0]) ? args[0] :
-                options.sessiondir+args[0]) : options.sessiondir+new Date().toLocaleString().replace(/\s/g,"_")+'.penta'
+                options.sessiondir+args[0]) : options.sessiondir+File(services.directory.get("ProfD", Ci.nsIFile)).leafName+'_'+new Date().toLocaleString().replace(/\s/g,"_")+'.penta'
         let file = io.File(filename);
       
         dactyl.assert(!file.exists() || args.bang, _("io.exists", file.path.quote()));
