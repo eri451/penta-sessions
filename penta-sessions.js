@@ -96,14 +96,20 @@ group.commands.add(['sessions[ave]','mkses[sion]'],
         }
         
         if (/tabs/.test(sesop)) {
-            tabs.visibleTabs.forEach(function (tab, i) {
-                let loc = tab.linkedBrowser.contentDocument.location.href;
-                if (/^dactyl:\/\/help\//.test(loc) && !/help/.test(sesop))
-                    return;
-                if (loc == 'about:blank' && !/blank/.test(sesop))
-                    return;
-                lines.push('tabopen '+loc);
-            });
+            tabs._groups.GroupItems.groupItems.forEach( function (group, k) {
+                lines.push('js let newGroup = tabs._groups.GroupItems.newGroup()');
+                lines.push('js newGroup.setTitle('+group.getTitle()+')');
+                lines.push('js tabs._groups.GroupItems.setActiveGroupItem(newGroup)');
+
+                group._children.forEach(function (tab, i) {
+                    let loc = tab.tab.linkedBrowser.contentDocument.location.href;
+                    if (/^dactyl:\/\/help\//.test(loc) && !/help/.test(sesop))
+                        return;
+                    if (loc == 'about:blank' && !/blank/.test(sesop))
+                        return;
+                    lines.push('tabopen '+loc);
+                });
+           });
         }
 
         try {
