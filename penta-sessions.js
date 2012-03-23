@@ -98,7 +98,8 @@ group.commands.add(['sessions[ave]','mkses[sion]'],
         if (/tabs/.test(sesop)) {
             tabs._groups.GroupItems.groupItems.forEach( function (group, k) {
                 lines.push('js let newGroup = tabs._groups.GroupItems.newGroup()');
-                lines.push('js newGroup.setTitle('+group.getTitle()+')');
+                if (!(group.getTitle() === ""))
+                    lines.push('js newGroup.setTitle('+group.getTitle()+')');
                 lines.push('js tabs._groups.GroupItems.setActiveGroupItem(newGroup)');
 
                 group._children.forEach(function (tab, i) {
