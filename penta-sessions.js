@@ -182,7 +182,7 @@ group.commands.add(['sessionl[oad]'],
         }
 
         let curtab = gBrowser.mCurrentTab;
-        if(!args.bang) tabs.keepOnly(curtab);
+        if(!args.bang) tabs.keepOnly(curtab); //FIXME deletes only visible tabs
         let sessionscript = io.source(file.path);
         sessionscript.unload();
         options.sessionfile=file.path;
