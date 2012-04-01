@@ -94,22 +94,30 @@ group.commands.add(['sessions[ave]','mkses[sion]'],
             cmds = array.flatten(cmds);
             lines = lines.concat(cmds);
         }
-        
-        if (/tabs/.test(sesop)) {
-            tabs._groups.GroupItems.groupItems.forEach( function (group, k) {
-                lines.push('js let newGroup = tabs._groups.GroupItems.newGroup()');
-                if (!(group.getTitle() === ""))
-                    lines.push('js newGroup.setTitle('+group.getTitle()+')');
-                lines.push('js tabs._groups.GroupItems.setActiveGroupItem(newGroup)');
 
-                group._children.forEach(function (tab, i) {
-                    let loc = tab.tab.linkedBrowser.contentDocument.location.href;
-                    if (/^dactyl:\/\/help\//.test(loc) && !/help/.test(sesop))
-                        return;
-                    if (loc == 'about:blank' && !/blank/.test(sesop))
-                        return;
-                    lines.push('tabopen '+loc);
-                });
+        if (/tabs/.test(sesop)) {
+            tabs.getGroups( function ({ GroupItems }) {
+                GroupItems.groupItems.forEach( function (group, k) {
+
+                    lines.push('js <<EOF');
+                    lines.push('tabs.getGroups(function ({ GroupItems }) {');
+                    lines.push('\tlet newGroup = GroupItems.newGroup();');
+                    if (!(group.getTitle() === ""))
+                        lines.push('\tnewGroup.setTitle('+group.getTitle()+');');
+                    lines.push('\tGroupItems.setActiveGroupItem(newGroup);');
+
+                    let children = group.getChildren();
+                    children.forEach(function (tab, i) {
+                        let loc = tab.tab.linkedBrowser.contentDocument.location.href;
+                        if (/^dactyl:\/\/help\//.test(loc) && !/help/.test(sesop))
+                            return;
+                        if (loc == 'about:blank' && !/blank/.test(sesop))
+                            return;
+                        lines.push('\tex.tabopen(\''+loc+'\');');
+                    });
+                    lines.push('});');
+                    lines.push('EOF');
+               });
            });
         }
 
