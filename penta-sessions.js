@@ -181,6 +181,16 @@ group.commands.add(['sessionl[oad]'],
             return;
         }
 
+        // delete inactive groups --> only vivisble tabs will remain
+        tabs.getGroups( function ({ GroupItems }) {
+            let activeGroup = GroupItems.getActiveGroupItem();
+            let items = GroupItems.groupItems;
+            for(let i in items){
+                if (items[i].id !== activeGroup.id)
+                    items[i].closeAll();
+            }
+        });
+
         let curtab = gBrowser.mCurrentTab;
         if(!args.bang) tabs.keepOnly(curtab); //FIXME deletes only visible tabs
         let sessionscript = io.source(file.path);
