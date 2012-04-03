@@ -103,7 +103,7 @@ group.commands.add(['sessions[ave]','mkses[sion]'],
                     lines.push('tabs.getGroups(function ({ GroupItems }) {');
                     lines.push('\tlet newGroup = GroupItems.newGroup();');
                     if (!(group.getTitle() === ""))
-                        lines.push('\tnewGroup.setTitle('+group.getTitle()+');');
+                        lines.push('\tnewGroup.setTitle(\''+group.getTitle()+'\');');
                     lines.push('\tGroupItems.setActiveGroupItem(newGroup);');
 
                     let children = group.getChildren();
